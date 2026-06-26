@@ -1,3 +1,4 @@
+// Shifts an integer 2 bits right and reports shift type
 #include <stdio.h>
 
 

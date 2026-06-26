@@ -1,3 +1,4 @@
+// Compares pre-decrement (--x) and post-decrement (x--)
 #include <stdio.h>
 
 

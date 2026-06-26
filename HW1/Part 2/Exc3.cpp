@@ -1,3 +1,4 @@
+// Same text statistics as Exc1, using switch statements
 #include <stdio.h>
 
 

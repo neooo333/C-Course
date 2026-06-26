@@ -1,3 +1,4 @@
+// Prints a Fahrenheit-to-Celsius conversion table
 #include <stdio.h>
 
 

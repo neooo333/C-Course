@@ -1,3 +1,4 @@
+// Subtracts two doubles using a helper function
 #include <stdio.h>
 
 

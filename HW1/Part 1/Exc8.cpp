@@ -1,4 +1,4 @@
-/* Assignment operators */
+/* Assignment operators — demonstrates *= and chained assignments */
 #include <stdio.h>           // Includes the standard input/output library so we can use printf
 
 int main(){                  // The main function where program execution begins

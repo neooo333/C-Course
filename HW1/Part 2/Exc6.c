@@ -1,3 +1,4 @@
+// Counts how often digits 0–4 appear in the input text
 #include <stdio.h>
 
 int main() {

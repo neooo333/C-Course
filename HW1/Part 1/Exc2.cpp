@@ -1,3 +1,4 @@
+// Reads triangle base and height, then prints the area
 #include "stdio.h"
 #include <cstdio>
 

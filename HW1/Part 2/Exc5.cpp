@@ -1,3 +1,4 @@
+// Prints a Celsius-to-Fahrenheit conversion table (0–19)
 #include <stdio.h>
 
 

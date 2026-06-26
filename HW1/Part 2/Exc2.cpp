@@ -1,3 +1,4 @@
+// Same text statistics as Exc1, using a do-while loop
 #include <stdio.h>
 
 

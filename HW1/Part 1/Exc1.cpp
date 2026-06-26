@@ -1,3 +1,4 @@
+// Prints a simple greeting to the console
 #include "stdio.h"
 
 

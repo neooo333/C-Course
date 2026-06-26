@@ -1,3 +1,4 @@
+// Evaluates arithmetic expressions and prints x after each step
 #include <stdio.h> // Includding standard liabrary to print off info in console
 
 

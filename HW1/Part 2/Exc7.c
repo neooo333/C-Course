@@ -1,3 +1,4 @@
+// Counts digit frequencies with extra output for the digit 3
 #include <stdio.h>
 
 int main() {

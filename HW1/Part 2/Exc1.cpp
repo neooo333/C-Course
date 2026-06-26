@@ -1,3 +1,4 @@
+// Counts characters, words, and newlines from stdin (while loop)
 #include <stdio.h>
 
 

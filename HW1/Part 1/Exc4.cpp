@@ -1,3 +1,4 @@
+// Prints "Married" or "Not Married" based on user input
 #include "stdio.h"
 
 int main () {

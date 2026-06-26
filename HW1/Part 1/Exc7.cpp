@@ -1,3 +1,4 @@
+// Multiplies a number by 2^n using left bit shift
 # include <stdio.h>
 
 int main (){

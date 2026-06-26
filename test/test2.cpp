@@ -3,11 +3,13 @@
 
 int main (){
 
-    int x = 56;
 
+    FILE *fp = fopen("data.txt", "w");
 
-    printf ("%c \n", x);
+    fprintf(fp, "Hello World!\n");
+    fprintf(fp, "Age = %d\n", 25);
 
+    fclose(fp);
 
 
 

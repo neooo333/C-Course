@@ -1,4 +1,4 @@
-/* Conditional expressions */
+/* Conditional expressions — ternary operator and side effects */
 #include <stdio.h>
 
 int main()
