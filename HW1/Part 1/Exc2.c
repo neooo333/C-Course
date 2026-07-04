@@ -1,6 +1,5 @@
-// Reads triangle base and height, then prints the area
-#include "stdio.h"
-#include <cstdio>
+// Ex2: area of a right triangle = 0.5 * base * height
+#include <stdio.h>
 
 
 int main (){
@@ -15,6 +14,7 @@ int main (){
     printf ("Enter the height of triangle \n");
     scanf("%lf", &height);
 
+    // 0.5 * base * height
     printf ("The area of your trianlge is: %lf \n", 0.5 * height * base);
 
     return 0;

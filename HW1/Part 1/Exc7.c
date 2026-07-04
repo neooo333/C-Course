@@ -13,7 +13,7 @@ int main (){
     printf ("Enter integer power of 2 that original number should be mulpiply by: ");
     scanf ("%d", &n);
 
-    final_number = number << n;
+    final_number = number << n;   // number * 2^n
 
     printf ("The shifted number: %d \n", final_number);
 

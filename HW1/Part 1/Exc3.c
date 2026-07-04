@@ -2,7 +2,7 @@
 #include <stdio.h> // Includding standard liabrary to print off info in console
 
 
-int main(){ // Start main function that will be executted when we run our script 
+int main(){ // Start main function that will be executted when we run script 
 
     int x; // Declare variable x as integer but not initialize it  yet
 

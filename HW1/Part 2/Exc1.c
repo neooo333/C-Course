@@ -8,7 +8,7 @@ int main (){
     long int characters =0;
     long int words= 0;
     long int new_lines = 0;
-    int in_word = 0;
+    int in_word = 0;   // tracks whether we are currently inside a word
 
     printf ("Input text. Numbers of charachters, words and new lines will couted \n");
 
@@ -21,6 +21,7 @@ int main (){
         };
 
 
+        // a word starts on the first non-blank char; blanks end it
         if (c == ' ' || c == '\t' || c == '\n') {
             in_word = 0; 
         } else {

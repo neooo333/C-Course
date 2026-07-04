@@ -1,11 +1,11 @@
-// Prints a Celsius-to-Fahrenheit conversion table (0–19)
+// Ex5: Celsius->Fahrenheit table 0..19 using a for loop
 #include <stdio.h>
 
 
 double fahrenheit_conversion (int c_degree){
 
     double fah;
-    double ratio = 9.0 / 5.0;
+    double ratio = 9.0 / 5.0;   // floating ratio to avoid integer division
     fah = (ratio * c_degree) + 32;
     return fah;
 }

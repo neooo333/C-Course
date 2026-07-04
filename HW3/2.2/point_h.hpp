@@ -20,16 +20,19 @@ class Point{
         ~Point ();
 
         // Get functions
-        double GetX () const;
-        double GetY () const;
+        double GetX ();
+        double GetY ();
 
         //Set Functions 
         void SetX (double new_x_value);
         void SetY (double new_y_value);  
 
-        // String description of a point 
+        // Returns a string like "Point(1.5, 3.9)" (no trailing newline)
+        string ToString () const;
 
-        string  ToString () const;
+        // Pythagorean distance to origin (0, 0) and to another point
+        double DistanceOrigin ();
+        double Distance (Point p);
 
         
 };
