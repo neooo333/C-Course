@@ -44,6 +44,7 @@ int main () {
         stack_array[i] = Point (i);
     }
 
+    // Printing elements of an array 
     for (int i = 0; i < size; i++){
         cout << stack_array [i] << endl;
     }
