@@ -1,4 +1,3 @@
-// Prints an integer digit-by-digit using recursion (no printf %d)
 #include <stdio.h> 
 
 void printnumber(int n) {

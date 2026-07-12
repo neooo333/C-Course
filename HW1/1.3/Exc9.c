@@ -1,8 +1,7 @@
 /* Conditional expressions — ternary operator and side effects */
 #include <stdio.h>
 
-int main()
-{
+int main(){
     int x=1;
     int y=1;
     int z=1; // Declared but unused

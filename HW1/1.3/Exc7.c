@@ -3,7 +3,7 @@
 
 int main (){
 
-    int n;
+    int n; //power
     int number;
     int final_number;
 
