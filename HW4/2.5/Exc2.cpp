@@ -17,7 +17,7 @@ int main (){
         cout << *heap_array_point[i] << endl;
     }
 
-    // deleting elements
+    // deleting elementsgit 
     for (int i= 0; i<3; i++){
          delete heap_array_point[i];
     }
