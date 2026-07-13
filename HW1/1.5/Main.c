@@ -3,7 +3,7 @@
 
 void print(void);
 
-int i = 5; // Global variable shared with Print.c
+int i = 5; // global variable shared with Print.c
 
 int main() {
     print();

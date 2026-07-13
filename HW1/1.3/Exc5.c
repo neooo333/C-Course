@@ -1,4 +1,4 @@
-// Compares  (--x) and post-decrement (x--)
+// Compares  (--x) and(x--)
 #include <stdio.h>
 
 
