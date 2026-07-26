@@ -11,6 +11,7 @@ Line::Line (const Point& p1, const Point& p2) : start(p1), finish(p2) {}
 
 Line::Line (const Line& line_passed) : start(line_passed.start), finish(line_passed.finish) {}
 
+// Destructor
 Line::~Line () {
     cout << "Line Object was destroyed" << endl;
 }
@@ -20,14 +21,17 @@ Point Line::start_point () const {
     return start;
 }
 
+// Changes the start point.
 void Line::start_point (const Point& new_value) {
     start = new_value;
 }
 
+// Returns a copy of the end point.
 Point Line::end_point () const{
     return finish;
 }
 
+// Changes the end point.
 void  Line::end_point (const Point& new_value){
     finish = new_value;
 }
@@ -41,7 +45,7 @@ string Line::ToString() const{
     return message.str();
 }
 
-// Length
+// Delegates to Point::Distance() to calculate the line length.
 double Line::Length () const{
     return start.Distance(finish);
 }

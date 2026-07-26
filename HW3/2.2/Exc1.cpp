@@ -23,7 +23,7 @@ int main () {
     cout << "The value of X: " << new_point.GetX() << endl;
     cout << "The value of Y: " << new_point.GetY() << endl;
 
-    // Exercise 2: distance to origin and to another point
+    // Exc2: distance to origin and to another point
     cout << "Distance from Origin: " << new_point.DistanceOrigin() << endl;
 
     cout << "Creating second point with coordinates (-1.5, 1)" << endl;

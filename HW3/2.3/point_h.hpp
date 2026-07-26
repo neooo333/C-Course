@@ -16,8 +16,7 @@ class Point{
 
         Point (double value_x, double value_y);
 
-
-        // Exc 1 Copy Constructor
+        // Creates a point by copying another point.
         Point (const Point& other);
 
         // Destructor
@@ -29,13 +28,17 @@ class Point{
 
         //Set Functions (default inline)
         void X (double new_x_value) { m_x = new_x_value; }
+
+        // Changes the y-coordinate using a default inline function.
         void Y (double new_y_value) { m_y = new_y_value; }
 
-        // Returns a string like "Point(1.5, 3.9)" (no trailing newline)
+        // Returns a string like  Point(1.5, 3.9)
         string ToString () const;
 
         // Pythagorean distance to origin (0, 0) and to another point
         double Distance () const;
+
+        // Calculates the distance from this point to another point.
         double Distance (const Point& p) const;
 
         

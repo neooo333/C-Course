@@ -11,27 +11,34 @@ class Point{
         double m_y;
 
     public:
-        // Constructors
+        // Default Constructors
         Point ();
 
+        // Constructor with parameters
         Point (double value_x, double value_y);
 
         // Destructor
         ~Point ();
 
-        // Get functions
+        // Returns the x-coordinate.
         double GetX ();
+
+        // Returns the y-coordinate.
         double GetY ();
 
-        //Set Functions 
+        //Changes the x-coordinate.
         void SetX (double new_x_value);
+
+        // Changes the y coordinate 
         void SetY (double new_y_value);  
 
-        // Returns a string like "Point(1.5, 3.9)" (no trailing newline)
+        //returns a string  of a point 
         string ToString () const;
 
-        // Pythagorean distance to origin (0, 0) and to another point
+        // Calculates the distance from this point to the origin.
         double DistanceOrigin ();
+
+        // Calculates the distance from this point to another point.
         double Distance (Point p);
 
         

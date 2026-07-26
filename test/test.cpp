@@ -3,14 +3,9 @@ using  namespace std;
 
 int main() {
 
+    int x = 5;
 
-    int* pp;
-
-    pp = new int;
-
-
-    cout << pp;
-
+    cout << ++x <<endl;
 
 
     return 0;

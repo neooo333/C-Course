@@ -4,7 +4,7 @@
 using namespace std;
 
 
-//Include Excersices 5 for "Improving your Classes"
+//Include Excersices 5 
 
 int main () {
 

@@ -1,12 +1,17 @@
 #ifndef LINE_H
 #define LINE_H
 
+#include "Shape_h.hpp"
 #include "point_h.hpp"
 #include <string>
+#include <ostream>
 
 using namespace std;
 
-class Line {
+namespace Mikita {
+    namespace CAD {
+
+class Line : public Shape{
 
     private:
         Point start;
@@ -18,26 +23,34 @@ class Line {
         Line (const Point& p1, const Point& p2);
         Line (const Line& line_passed);
         ~Line ();
-
-        // Returns a copy of the start point.
+    // Getters and Setters
         Point start_point () const;
-
-        // Changes the start point.
         void start_point (const Point& new_value);
 
-        // Returns a copy of the end point.
         Point end_point () const;
-
-        // Changes the end point.
         void end_point (const Point& new_value);
 
     // ToString 
 
-        string ToString() const;
+        virtual string ToString() const;
 
-        // Calculates the distance between the start and end points.
+    // Length
         double Length () const;
+    // Operator Overload
+        Line& operator = (const Line& l);
+
+        friend ostream& operator << (ostream&  os, const Line& l);
+
+        // Creating Draw function 
+        void Draw () const {cout<< "Draw a Line";}
 
 };
+
+
+}
+
+}
+
+
 
 #endif
