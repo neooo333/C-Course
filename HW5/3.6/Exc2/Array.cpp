@@ -1,0 +1,83 @@
+#include "Array.hpp"
+#include "Point.hpp"
+#include <cstdlib>
+#include <iostream>
+#include "ArrayException.hpp"
+
+using Mikita::Containers::OutOfBoundsException;
+
+namespace Mikita {
+    namespace Containers {
+    
+
+        Array::Array (): m_size (10), m_data (new CAD::Point [10]){}
+
+        Array::Array (const int& size) : m_size (size), m_data (new CAD::Point [size]){}
+
+        Array::Array (const Array& arr){
+            m_size = arr.m_size;
+            m_data = new CAD::Point [arr.m_size];
+            for (int i = 0; i < arr.m_size; i++){
+                m_data [i] = arr.m_data [i];
+            }
+        }
+
+        Array::~Array (){
+            delete [] m_data;
+            cout << "Destructor was called" << endl;
+        }
+
+        Array& Array::operator = (const Array& arr){
+            if (this == &arr){ 
+            return *this; 
+            }
+
+            m_size = arr.m_size;
+
+            delete [] m_data;
+            m_data = new CAD::Point [arr.m_size];
+            for (int i = 0; i < arr.m_size; i++){
+                m_data [i] = arr.m_data [i];
+            }
+            return *this;
+        }
+
+        void Array::SetElement (const int& index, const CAD::Point& point){
+            if ((index > (m_size -1))
+            || 
+            (index < 0))
+            {
+                throw OutOfBoundsException (index); // throw OutOfBoundsException object instead of -1
+            }else {
+                m_data[index] = point;
+            }
+        }
+
+        CAD::Point& Array::GetElement (const int& index){
+            if ((index > (m_size -1)) || (index < 0))
+            {
+                throw OutOfBoundsException (index); // throw OutOfBoundsException object instead of -1
+            }else {
+                return m_data[index];
+            }
+        }
+
+
+        CAD::Point& Array::operator [] (const int& index){
+            if ((index > (m_size -1)) || (index < 0))
+            {
+                throw OutOfBoundsException (index);  // throw OutOfBoundsException object instead of -1
+            }else {
+            return GetElement(index);
+            }
+        }
+
+        const CAD::Point& Array::operator [] (const int& index) const{
+            if (index < 0 || index > (m_size - 1)) {
+                throw OutOfBoundsException (index); // throw OutOfBoundsException object instead of -1
+            }
+            return m_data[index];
+        }
+}
+
+}   
