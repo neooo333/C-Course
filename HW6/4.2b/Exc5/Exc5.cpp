@@ -1,5 +1,5 @@
-#include "stack.hpp"
-#include "stack_exception.hpp"
+#include "Stack.hpp"
+#include "StackException.hpp"
 
 #include <iostream>
 using Mikita::Containers::Stack;
@@ -21,7 +21,7 @@ int main()
     }
     catch (const StackFullException& e)
     {
-        std::cout << "Cannot push: stack is full." <<std::endl;
+        std::cout << "stack is full." <<std::endl;
     }
 
     try

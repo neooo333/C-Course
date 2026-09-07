@@ -47,11 +47,11 @@ int main () {
         cout << endl;
         //Testing Sums with specifed iterators
 
-        cout << "Sum of the Second and Thrird values in list: " 
+        cout << "Sum of the Second and Third values in list: " 
             << Sum (next(default_list.begin(),  1), 
                 next(default_list.end(), -1)) << endl;
 
-        cout << "Sum of the Second and Thrird values in vector: " 
+        cout << "Sum of the Second and Third values in vector: " 
             << Sum ((default_vector.begin () +1),
              (default_vector.end ()-1)) << endl;
 

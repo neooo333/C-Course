@@ -1,5 +1,5 @@
-#include "stack.hpp"
-#include "stack_exception.hpp"
+#include "Stack.hpp"
+#include "StackException.hpp"
 
 #include <iostream>
 
@@ -18,15 +18,15 @@ int main() {
     {
         stack.Push(40);
     } catch (const StackFullException&) {
-        cout << "Cannot push: stack is full." << endl;
+        
+        cout << "stack is full." << endl;
     }
 
     Stack<int, 3> copy(stack);
     Stack<int, 3> assigned;
     assigned = stack;
-
-    cout << "Original stack: " << stack.Pop() << endl;
-    cout << "Copied stack: " << copy.Pop() << endl;
+    cout << "Original stack: " <<  stack.Pop() << endl;
+    cout << "Copied stack: " <<  copy.Pop() <<  endl;
     cout << "Assigned stack: " << assigned.Pop() << endl;
 
     return 0;

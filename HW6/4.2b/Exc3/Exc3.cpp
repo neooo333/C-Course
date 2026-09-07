@@ -1,6 +1,6 @@
-#include "point.hpp"
-#include "pointarray.hpp"
-#include "array_exception.hpp"
+#include "Point.hpp"
+#include "PointArray.hpp"
+#include "ArrayException.hpp"
 #include <iostream>
 
 using namespace Mikita::Containers;
@@ -8,7 +8,7 @@ using Mikita::CAD::Point;
 using namespace std;
 
 int main(){
-    // Default constructor (size = DefaultSize)
+    // Default constructor 
     PointArray test_array;
     cout << "Default PointArray size: " << test_array.Size() << endl;
 
@@ -36,12 +36,12 @@ int main(){
     assigned = pts;
     cout << "Assigned Length(): " << assigned.Length() << endl;
 
-    // Single-point array: Length should be 0
+    // Single point array: Length should be 0
     PointArray one(1);
     one[0] = Point(1.0, 1.0);
     cout << "Single-point Length(): " << one.Length() << endl;
 
-    //Inherited Array access still throws on bad index
+    //Inherited Array access still throws 
     try {
         cout << pts[10] << endl;
     } catch (const ArrayException& e) {

@@ -1,5 +1,5 @@
-#include "stack.hpp"
-#include "array_exception.hpp"
+#include "Stack.hpp"
+#include "ArrayException.hpp"
 #include <iostream>
 
 using namespace Mikita::Containers;
@@ -8,13 +8,14 @@ using namespace std;
 int main() {
     Stack<int> s(3);
 
-    cout << "Pushing 10, 20, 30..." << endl;
+    cout << "Pushing 10, 20, 30" << endl;
     s.Push(10);
     s.Push(20);
     s.Push(30);
 
+    //checking exception 
     try {
-        cout << "Pushing 40 onto full stack..." << endl;
+        cout << "Pushing 40 onto full stack" << endl;
         s.Push(40);
     } catch (const ArrayException& e) {
         cout <<  e.GetMessage() << endl;
@@ -25,14 +26,16 @@ int main() {
     cout << "Pop: " << s.Pop() << endl;
 
     try {
-        cout << "Popping empty stack..." << endl;
+        cout << "Popping empty stack" << endl;
         cout << s.Pop() << endl;
     } catch (const ArrayException& e) {
         cout << "Caught on Pop: " << e.GetMessage() << endl;
     }
 
+
     Stack<int> s2(5);
     s2.Push(1);
+    
     s2.Push(2);
 
     Stack<int> s3(s2);

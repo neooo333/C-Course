@@ -1,7 +1,7 @@
-#include "point.hpp"
-#include "array.hpp" // this .hpp file includes array.cpp that is why I am including array.hpp and not array.cpp
+#include "Point.hpp"
+#include "Array.hpp" // this .hpp file includes array.cpp that is why I am including array.hpp and not array.cpp
 #include "iostream"
-#include "array_exception.hpp"
+#include "ArrayException.hpp"
 using namespace Mikita::Containers;
 using Mikita::CAD::Point;
 using namespace std;
