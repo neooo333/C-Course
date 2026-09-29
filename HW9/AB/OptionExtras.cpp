@@ -6,6 +6,7 @@
 
 #include "EuropeanOption.hpp"
 #include <map>
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include <cmath>
@@ -46,25 +47,50 @@ std::vector<double> PriceOverMesh(const EuropeanOption& opt,
 	return prices;
 }
 
+std::vector<double> DeltaOverMesh(const EuropeanOption& opt,
+	const std::vector<double>& S_mesh)
+{
+	std::vector<double> deltas;
+	deltas.reserve(S_mesh.size());
+	for (std::size_t i = 0; i < S_mesh.size(); ++i)
+		deltas.push_back(opt.Delta(S_mesh[i]));
+	return deltas;
+}
+
+
+
 // Each row of params: {r, sig, K, T, b, S}. Returns one price per row.
 std::vector<std::vector<double>> PriceMatrix(
 	const std::vector<std::vector<double>>& params,
-	const std::string& optType)
-{
-	std::vector<std::vector<double>> prices;
-	prices.reserve(params.size());
+	const std::string& optType,
+	const std::string& out_type){
 
-	for (std::size_t i = 0; i < params.size(); ++i)
-	{
+	double (EuropeanOption::*metric) (double) const;
+
+	if (out_type =="Price"){
+		metric = &EuropeanOption::Price;
+	}else if (out_type == "Delta"){
+		metric = &EuropeanOption::Delta;
+	}else if (out_type == "Gamma"){
+		metric = &EuropeanOption::Gamma;
+	}else{
+		throw std::invalid_argument ("Unknown out_type");
+	}
+
+	std::vector<std::vector<double>> metrics;
+	metrics.reserve(params.size());
+
+	for (std::size_t i = 0; i < params.size(); ++i){
 		const std::vector<double>& row = params[i];
 		EuropeanOption opt(row[0], row[1], row[2], row[3], row[4],
 			optType, "Stock");
-		prices.push_back(std::vector<double>{opt.Price(row[5])});
+		metrics.push_back(std::vector<double>{(opt.*metric)(row[5])});
 	}
-	return prices;
+
+	return metrics;
 }
 
-// Build a params matrix from a base option by sweeping one field over mesh.
+//Build a params matrix from a base option by sweeping one field over mesh.
 // whichParam: "r", "sig", "K", "T", "b", or "S". S0 is the spot used when
 // whichParam is not "S".
 std::vector<std::vector<double>> BuildParamMatrix(

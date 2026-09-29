@@ -14,9 +14,13 @@ std::vector<double> MeshVector(double start, double end, double h);
 std::vector<double> PriceOverMesh(const EuropeanOption& opt,
 	const std::vector<double>& S_mesh);
 
+std::vector<double> DeltaOverMesh(const EuropeanOption& opt,
+    const std::vector<double>& S_mesh);
+
 std::vector<std::vector<double>> PriceMatrix(
 	const std::vector<std::vector<double>>& params,
-	const std::string& optType);
+	const std::string& optType,
+	const std::string& out_type = "Price");
 
 std::vector<std::vector<double>> BuildParamMatrix(
 	const EuropeanOption& base,
@@ -108,7 +112,7 @@ int main ()
 	vector<double> T_mesh = MeshVector(0.25, 1.0, 0.25);
 	vector<vector<double>> T_params =
 		BuildParamMatrix(batch1, T_mesh, "T", spots["Batch 1"]);
-	vector<vector<double>> T_prices = PriceMatrix(T_params, "C");
+	vector<vector<double>> T_prices = PriceMatrix(T_params, "C", "Price");
 
 	for (size_t i = 0; i < T_mesh.size(); ++i)
 	{
@@ -120,7 +124,7 @@ int main ()
 	vector<double> sig_mesh = MeshVector(0.10, 0.50, 0.10);
 	vector<vector<double>> sig_params =
 		BuildParamMatrix(batch1, sig_mesh, "sig", spots["Batch 1"]);
-	vector<vector<double>> sig_prices = PriceMatrix(sig_params, "C");
+	vector<vector<double>> sig_prices = PriceMatrix(sig_params, "C", "Price");
 
 	for (size_t i = 0; i < sig_mesh.size(); ++i)
 	{
@@ -136,6 +140,33 @@ int main ()
     gamma_delta_test.toggle ();
     cout << "Delta Value Put: " << gamma_delta_test.Delta (105) << endl;
     cout << "Gamma Value Call/Put: " << gamma_delta_test.Gamma (105) << endl;
+
+    cout << "\n=== Part A2 (b) ===\n";
+    
+    gamma_delta_test.toggle();
+    vector<double> delta_prices = MeshVector (10, 50, 1);
+    vector<double> deltas_mesh = DeltaOverMesh (gamma_delta_test, delta_prices);
+
+    temp_count_itr = 0;
+    for (vector<double>::const_iterator it = deltas_mesh.begin(); 
+        it != deltas_mesh.end();
+        it++){
+            cout << "Delta at Price " << delta_prices[temp_count_itr] 
+                << " is " << deltas_mesh[temp_count_itr] << endl;
+        temp_count_itr++;
+        }
+
+    cout << "\n=== Part A2 (c) ===\n";
+
+    vector<vector<double>> greek_params =
+        BuildParamMatrix(gamma_delta_test, MeshVector(95, 115, 5), "S", 105);
+    vector<vector<double>> deltas = PriceMatrix(greek_params, "C", "Delta");
+    vector<vector<double>> gammas = PriceMatrix(greek_params, "C", "Gamma");
+
+    for (size_t i = 0; i < greek_params.size(); ++i)
+        cout << "  S = " << greek_params[i][5]
+             << "  Delta = " << deltas[i][0]
+             << "  Gamma = " << gammas[i][0] << '\n';
 
 	return 0;
 }
