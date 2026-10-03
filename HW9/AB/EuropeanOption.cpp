@@ -180,6 +180,34 @@ double EuropeanOption::Gamma (double U) const{
 };
 
 
+
+double EuropeanOption::Delta (double U, string method, double h) const{
+	if (method == "approximation"){
+		double numerator  = EuropeanOption::Price (U + h) - EuropeanOption::Price (U - h);
+		double denominator = 2 * h;
+		return numerator / denominator;
+	}else if (method == "exact"){
+		return EuropeanOption::Delta (U);
+	}else {
+		throw std::invalid_argument ("Invalid method");
+	}
+}
+
+double EuropeanOption::Gamma (double U, string method, double h) const{
+	if (method == "approximation"){
+		double numerator  = EuropeanOption::Price (U + h) 
+			+ EuropeanOption::Price (U - h)
+			- 2 * EuropeanOption::Price (U);
+		double denominator = h * h;
+		return numerator / denominator;
+	}else if (method == "exact"){
+		return EuropeanOption::Gamma (U);
+	}else {
+		throw std::invalid_argument ("Invalid method");
+	}
+}
+
+
 // ##################################################
 
 // Put-call parity helpers (independent of m_optType)

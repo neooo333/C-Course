@@ -168,5 +168,39 @@ int main ()
              << "  Delta = " << deltas[i][0]
              << "  Gamma = " << gammas[i][0] << '\n';
 
+     cout << "\n=== Part A2 (d) ===\n";
+
+    // Generating h values
+
+    vector <double> h = MeshVector(0.1, 3, 0.5);
+
+    // Comparing Delta at different vlaues of h
+
+    cout << "<<Delta Difference at S = 105>>"<< endl;
+    double S = 105;
+    for (double value : h){
+        double exact_delta = gamma_delta_test.Delta (S);
+        double num_delta = gamma_delta_test.Delta (S, "approximation", value);
+
+        cout << "Exact Delta: " << exact_delta << endl 
+        << "Numerical Delta: " << num_delta <<endl
+        << "Difference between Exact and Numerical Delta at h = " << value << ": " << exact_delta - num_delta
+        << endl <<endl;;
+    }
+
+
+    cout << "<<Gamma Difference at S = 105>>"<< endl;
+    for (double value : h){
+        double exact_gamma = gamma_delta_test.Gamma (S);
+        double num_gamma = gamma_delta_test.Gamma (S, "approximation", value);
+
+        cout << "Exact Gamma: " << exact_gamma << endl 
+        << "Numerical Gamma: " << num_gamma <<endl
+        << "Difference between Exact and Numerical Gamma at h = " << value << ": " << exact_gamma - num_gamma
+        << endl <<endl;;
+    }
+
+    cout << "\n=== Part B (d) ===\n";
+    
 	return 0;
 }

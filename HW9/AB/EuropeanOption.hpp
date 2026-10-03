@@ -69,7 +69,6 @@ public:	// Public functions
 
 	const double& sig() const { return m_sig; }
 	void sig(double sig_value) { m_sig = sig_value; }
-
 	const double& K() const { return m_K; }
 	void K(double K_value) { m_K = K_value; }
 
@@ -112,6 +111,11 @@ public:	// Public functions
 
 	double Delta(double U) const;
 	double Gamma (double U) const;
+
+	double Delta (double U, string method, double h = 0.01) const;
+	double Gamma (double U, string method, double h = 0.01) const;
+
+
 
 
 };
