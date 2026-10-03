@@ -28,48 +28,37 @@ double EuropeanOption::N(double x) const
 }
 
 
+// Black-Scholes helper
+double EuropeanOption::d1(double U) const
+{
+	return ( log(U/m_K) + (m_b + (m_sig*m_sig)*0.5) * m_T ) / (m_sig * sqrt(m_T));
+}
+
+double EuropeanOption::d2(double U) const
+{
+	return d1(U) - m_sig * sqrt(m_T);
+}
+
+
 // Kernel Functions (Haug)
 double EuropeanOption::CallPrice(double U) const
 {
-
-	double tmp = m_sig * sqrt(m_T);
-
-	double d1 = ( log(U/m_K) + (m_b+ (m_sig*m_sig)*0.5 ) * m_T )/ tmp;
-	double d2 = d1 - tmp;
-
-
-	return (U * exp((m_b-m_r)*m_T) * N(d1)) - (m_K * exp(-m_r * m_T)* N(d2));
-
+	return (U * exp((m_b-m_r)*m_T) * N(d1(U))) - (m_K * exp(-m_r * m_T) * N(d2(U)));
 }
 
 double EuropeanOption::PutPrice(double U) const
 {
-
-	double tmp = m_sig * sqrt(m_T);
-	double d1 = ( log(U/m_K) + (m_b+ (m_sig*m_sig)*0.5 ) * m_T )/ tmp;
-	double d2 = d1 - tmp;
-
-	return (m_K * exp(-m_r * m_T)* N(-d2)) - (U * exp((m_b-m_r)*m_T) * N(-d1));
-
+	return (m_K * exp(-m_r * m_T) * N(-d2(U))) - (U * exp((m_b-m_r)*m_T) * N(-d1(U)));
 }
 
 double EuropeanOption::CallDelta(double U) const
 {
-	double tmp = m_sig * sqrt(m_T);
-
-	double d1 = ( log(U/m_K) + (m_b+ (m_sig*m_sig)*0.5 ) * m_T )/ tmp;
-
-
-	return exp((m_b-m_r)*m_T) * N(d1);
+	return exp((m_b-m_r)*m_T) * N(d1(U));
 }
 
 double EuropeanOption::PutDelta(double U) const
 {
-	double tmp = m_sig * sqrt(m_T);
-
-	double d1 = ( log(U/m_K) + (m_b+ (m_sig*m_sig)*0.5 ) * m_T )/ tmp;
-
-	return exp((m_b-m_r)*m_T) * (N(d1) - 1.0);
+	return exp((m_b-m_r)*m_T) * (N(d1(U)) - 1.0);
 }
 
 
@@ -184,9 +173,7 @@ double EuropeanOption::Delta(double U) const
 
 double EuropeanOption::Gamma (double U) const{
 
-	double tmp = m_sig * sqrt(m_T);
-	double d1 = ( log(U/m_K) + (m_b+ (m_sig*m_sig)*0.5 ) * m_T )/ tmp;
-	double numerator  = n(d1) * exp((m_b - m_r) * m_T);
+	double numerator  = n(d1(U)) * exp((m_b - m_r) * m_T);
 	double denominator = U * m_sig * sqrt(m_T);
 
 	return numerator / denominator;

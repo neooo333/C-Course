@@ -32,6 +32,10 @@ private:
 	void init();	// Initialise all default values
 	void copy(const EuropeanOption& o2);
 
+	// Black-Scholes helper 
+	double d1(double U) const;
+	double d2(double U) const;
+
 	// 'Kernel' functions for option calculations
 	double CallPrice(double U) const;
 	double PutPrice(double U) const;
