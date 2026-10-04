@@ -1,4 +1,5 @@
 #include "EuropeanOption.hpp"
+#include "AmericanOption.hpp"
 #include <iostream>
 #include <map>
 #include <string>
@@ -6,12 +7,13 @@
 #include <vector>
 
 using namespace std;
+using namespace Mikita::Options;
 
 map<string, EuropeanOption> createBatches();
 
 std::vector<double> MeshVector(double start, double end, double h);
 
-std::vector<double> PriceOverMesh(const EuropeanOption& opt,
+std::vector<double> PriceOverMesh(const Option& opt,
 	const std::vector<double>& S_mesh);
 
 std::vector<double> DeltaOverMesh(const EuropeanOption& opt,
@@ -20,10 +22,17 @@ std::vector<double> DeltaOverMesh(const EuropeanOption& opt,
 std::vector<std::vector<double>> PriceMatrix(
 	const std::vector<std::vector<double>>& params,
 	const std::string& optType,
-	const std::string& out_type = "Price");
+	const std::string& out_type = "Price",
+	const std::string& style = "European");
 
 std::vector<std::vector<double>> BuildParamMatrix(
 	const EuropeanOption& base,
+	const std::vector<double>& mesh,
+	const std::string& whichParam,
+	double S0);
+
+std::vector<std::vector<double>> BuildParamMatrix(
+	const AmericanOption& base,
 	const std::vector<double>& mesh,
 	const std::string& whichParam,
 	double S0);
@@ -199,8 +208,37 @@ int main ()
         << "Difference between Exact and Numerical Gamma at h = " << value << ": " << exact_gamma - num_gamma
         << endl <<endl;;
     }
+    cout << "\n=== Part B (a) ===\n";
+
+    cout << "AmericanOption class was added to implement formulae" <<endl;
+
+    cout << "\n=== Part B (b) ===\n";
+
+    AmericanOption test_American_option = AmericanOption (0.1, 0.1, 100, 0.02, "C");
+    cout << "American Call Price: " << test_American_option.Price (110) << endl;
+    test_American_option.toggle();
+    cout << "American Put Price: " << test_American_option.Price (110) << endl;
+
+    cout << endl;
+
+    cout << "\n=== Part B (c) ===\n";
+
+    //Generating S values using global function 
+
+    vector <double> american_s =  MeshVector(70, 120, 1);
+
+    test_American_option.toggle ();
+    vector <double> american_p = PriceOverMesh(test_American_option, american_s);
+
+    temp_count_itr = 0;
+    for (vector<double>::const_iterator it = american_p.begin (); it != american_p.end (); it++){
+        cout<< "American Call value at S = " << american_s[temp_count_itr] << ": " << *it << endl;
+        temp_count_itr++;
+    }
 
     cout << "\n=== Part B (d) ===\n";
+
+    
     
 	return 0;
 }

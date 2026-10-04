@@ -4,13 +4,16 @@
 // (C) Datasim Component Technology BV 2003
 //
 
+#include "AmericanOption.hpp"
 #include "EuropeanOption.hpp"
+#include "Option.hpp"
 #include <map>
 #include <stdexcept>
 #include <string>
 #include <vector>
 #include <cmath>
 
+using namespace Mikita::Options;
 
 std::map<std::string, EuropeanOption> createBatches()
 {
@@ -37,7 +40,7 @@ std::vector<double> MeshVector(double start, double end, double h) {
 }
 
 // Price a fixed option at each spot in S_mesh.
-std::vector<double> PriceOverMesh(const EuropeanOption& opt,
+std::vector<double> PriceOverMesh(const Option& opt,
                                   const std::vector<double>& S_mesh)
 {
 	std::vector<double> prices;
@@ -59,28 +62,47 @@ std::vector<double> DeltaOverMesh(const EuropeanOption& opt,
 
 
 
-// Each row of params: {r, sig, K, T, b, S}. Returns one price per row.
+// European rows: {r, sig, K, T, b, S}. American rows: {r, sig, K, b, S}.
+// style: "European" (default) or "American". American only supports out_type "Price".
 std::vector<std::vector<double>> PriceMatrix(
 	const std::vector<std::vector<double>>& params,
 	const std::string& optType,
-	const std::string& out_type){
-
-	double (EuropeanOption::*metric) (double) const;
-
-	if (out_type =="Price"){
-		metric = &EuropeanOption::Price;
-	}else if (out_type == "Delta"){
-		metric = &EuropeanOption::Delta;
-	}else if (out_type == "Gamma"){
-		metric = &EuropeanOption::Gamma;
-	}else{
-		throw std::invalid_argument ("Unknown out_type");
-	}
-
+	const std::string& out_type,
+	const std::string& style)
+{
 	std::vector<std::vector<double>> metrics;
 	metrics.reserve(params.size());
 
-	for (std::size_t i = 0; i < params.size(); ++i){
+	if (style == "American")
+	{
+		if (out_type != "Price")
+			throw std::invalid_argument("American options only support Price");
+
+		for (std::size_t i = 0; i < params.size(); ++i)
+		{
+			const std::vector<double>& row = params[i];
+			AmericanOption opt(row[0], row[1], row[2], row[3], optType);
+			metrics.push_back(std::vector<double>{opt.Price(row[4])});
+		}
+		return metrics;
+	}
+
+	if (style != "European")
+		throw std::invalid_argument("Unknown style (use European or American)");
+
+	double (EuropeanOption::*metric) (double) const;
+
+	if (out_type == "Price")
+		metric = &EuropeanOption::Price;
+	else if (out_type == "Delta")
+		metric = &EuropeanOption::Delta;
+	else if (out_type == "Gamma")
+		metric = &EuropeanOption::Gamma;
+	else
+		throw std::invalid_argument("Unknown out_type");
+
+	for (std::size_t i = 0; i < params.size(); ++i)
+	{
 		const std::vector<double>& row = params[i];
 		EuropeanOption opt(row[0], row[1], row[2], row[3], row[4],
 			optType, "Stock");
@@ -129,4 +151,41 @@ std::vector<std::vector<double>> BuildParamMatrix(
 	return params;
 }
 
+// American rows: {r, sig, K, b, S}. whichParam: "r", "sig", "K", "b", or "S".
+std::vector<std::vector<double>> BuildParamMatrix(
+	const AmericanOption& base,
+	const std::vector<double>& mesh,
+	const std::string& whichParam,
+	double S0)
+{
+	std::vector<std::vector<double>> params;
+	params.reserve(mesh.size());
+
+	for (std::size_t i = 0; i < mesh.size(); ++i)
+	{
+		double r = base.r();
+		double sig = base.sig();
+		double K = base.K();
+		double b = base.b();
+		double S = S0;
+
+		if (whichParam == "r")
+			r = mesh[i];
+		else if (whichParam == "sig")
+			sig = mesh[i];
+		else if (whichParam == "K")
+			K = mesh[i];
+		else if (whichParam == "b")
+			b = mesh[i];
+		else if (whichParam == "S")
+			S = mesh[i];
+		else if (whichParam == "T")
+			throw std::invalid_argument("American options have no T parameter");
+		else
+			throw std::invalid_argument("Unknown whichParam");
+
+		params.push_back(std::vector<double>{r, sig, K, b, S});
+	}
+	return params;
+}
 
