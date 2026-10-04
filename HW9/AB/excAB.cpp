@@ -235,10 +235,18 @@ int main ()
         cout<< "American Call value at S = " << american_s[temp_count_itr] << ": " << *it << endl;
         temp_count_itr++;
     }
+	cout << "\n=== Part B (d)===\n";
+	vector<double> am_sig_mesh = MeshVector(0.10, 0.50, 0.10);
+	vector<vector<double>> am_sig_params =
+		BuildParamMatrix(test_American_option, am_sig_mesh, "sig", 110.0);
+	vector<vector<double>> am_sig_prices =
+		PriceMatrix(am_sig_params, "C", "Price", "American");
 
-    cout << "\n=== Part B (d) ===\n";
+	for (size_t i = 0; i < am_sig_mesh.size(); ++i)
+	{
+		cout << "sig = " << am_sig_mesh[i]
+		     << "  American Call = " << am_sig_prices[i][0] << '\n';
+	}
 
-    
-    
 	return 0;
 }
