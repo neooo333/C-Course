@@ -1,0 +1,193 @@
+// HardCoded.cpp
+//
+// C++ code to price an option, essential algorithms.
+//
+// We take CEV model with a choice of the elaticity parameter
+// and the Euler method. We give option price and number of times
+// S hits the origin.
+//
+// (C) Datasim Education BC 2008-2011
+//
+
+#include "OptionData.hpp" 
+#include "UtilitiesDJD/RNG/NormalGenerator.hpp"
+#include "UtilitiesDJD/Geometry/Range.cpp"
+#include <cmath>
+#include <cstddef>
+#include <iostream>
+
+template <class T> void print(const std::vector<T>& myList)
+{  // A generic print function for vectors
+	
+	std::cout << std::endl << "Size of vector is " << myList.size() << "\n[";
+
+	// We must use a const iterator here, otherwise we get a compiler error.
+	typename std::vector<T>::const_iterator i;
+	for (i = myList.begin(); i != myList.end(); ++i)
+	{
+			std::cout << *i << ",";
+
+	}
+
+	std::cout << "]\n";
+}
+
+namespace SDEDefinition
+{ // Defines drift + diffusion + data
+
+	OptionData* data;				// The data for the option MC
+
+	double drift(double t, double X)
+	{ // Drift term
+	
+		return (data->r)*X; // r - D
+	}
+
+	
+	double diffusion(double t, double X)
+	{ // Diffusion term
+	
+		double betaCEV = 1.0;
+		return data->sig * pow(X, betaCEV);
+		
+	}
+
+	double diffusionDerivative(double t, double X)
+	{ // Diffusion term, needed for the Milstein method
+	
+		double betaCEV = 1.0;
+		return 0.5 * (data->sig) * (betaCEV) * pow(X, 2.0 * betaCEV - 1.0);
+	}
+} // End of namespace
+
+double SD (int NSIM, double r, double T, const std::vector <double>& option_prices){
+
+	double sum_prices = 0;
+	double sum_squared_prices = 0;
+
+	for (size_t index =0; index < option_prices.size(); index++){
+		sum_squared_prices += option_prices[index] * option_prices[index];
+		sum_prices += option_prices[index];
+	}
+	double sum_prices_squared = sum_prices *sum_prices;
+
+	double first_multiplier = sqrt((sum_squared_prices -(sum_prices_squared / NSIM))  / (NSIM -1));
+
+	return first_multiplier * exp (-r * T);
+}
+
+double SE (double SD, double NSIM){return SD / sqrt(NSIM);}
+
+
+
+int main()
+{
+	std::cout <<  "1 factor MC with explicit Euler\n";
+	// Defaults = Batch 1 call (exact BS call = 2.13337 from Group AB)
+	OptionData myOption;
+	myOption.K = 65.0;
+	myOption.T = 0.25;
+	myOption.r = 0.08;
+	myOption.sig = 0.3;
+	myOption.type = 1;	// Put -1, Call +1
+	double S_0 = 60;
+	
+	long N = 100;
+	std::cout << "Number of subintervals in time: ";
+	std::cin >> N;
+	std::cout << N << std::endl;
+
+	// V2 mediator stuff
+	long NSim = 50000;
+	std::cout << "Number of simulations: ";
+	std::cin >> NSim;
+	std::cout << NSim << std::endl;
+
+	/*
+	
+		double tmpK;
+	if (std::cin >> tmpK)
+	{
+		myOption.K = tmpK;
+		std::cin >> myOption.T >> myOption.r >> myOption.sig >> myOption.type >> S_0;
+	}
+
+	
+	*/
+	// Optional trailing params (for batch runs without recompiling):
+	// K T r sig type S0
+
+
+	// Create the basic SDE (Context class)
+	Range<double> range (0.0, myOption.T);
+	double VOld = S_0;
+	double VNew;
+
+	std::vector<double> x = range.mesh(N);
+
+	double k = myOption.T / double (N);
+	double sqrk = sqrt(k);
+
+	// Normal random number
+	double dW;
+	double price = 0.0;	// Option price
+
+	// NormalGenerator is a base class
+	NormalGenerator* myNormal = new BoostNormal();
+
+	using namespace SDEDefinition;
+	SDEDefinition::data = &myOption;
+
+	std::vector<double> res;
+	int coun = 0; // Number of times S hits origin
+
+	std::vector <double> asset_pricies_sim;
+	asset_pricies_sim.reserve(NSim);
+	// A.
+	for (long i = 1; i <= NSim; ++i)
+	{ // Calculate a path at each iteration
+			
+		if ((i/100000) * 100000 == i)
+		{// Give status after each 100000th iteration
+
+				std::cout << i << std::endl;
+		}
+
+		VOld = S_0;
+		for (unsigned long index = 1; index < x.size(); ++index)
+		{
+
+			// Create a random number
+			dW = myNormal->getNormal();
+				
+			// The FDM (in this case explicit Euler)
+			VNew = VOld  + (k * drift(x[index-1], VOld))
+						+ (sqrk * diffusion(x[index-1], VOld) * dW);
+
+			VOld = VNew;
+
+			// Spurious values
+			if (VNew <= 0.0) coun++;
+		}
+			
+		double tmp = myOption.myPayOffFunction(VNew);
+		price += (tmp)/double(NSim);
+
+		asset_pricies_sim.push_back(tmp);
+	}
+	
+	// D. Finally, discounting the average price
+	price *= exp(-myOption.r * myOption.T);
+
+	double SD_calcaulted = SD (NSim, myOption.r, myOption.T, asset_pricies_sim);
+
+	// Cleanup; V2 use scoped pointer
+	delete myNormal;
+
+	std::cout << "Price, after discounting: " << price << ", " << std::endl;
+	std::cout << "Number of times origin is hit: " << coun << std::endl;
+
+	std::cout << "SD is equal to: " << SD_calcaulted << std::endl;
+	std::cout << "SE is equal to: " << SE (SD_calcaulted, NSim) << std::endl;
+	return 0;
+}
