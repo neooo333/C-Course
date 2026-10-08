@@ -1,3 +1,7 @@
+// AmericanOption.cpp
+//
+// Implementation of the perpetual American option price.
+
 #include "AmericanOption.hpp"
 #include "Option.hpp"
 #include <cmath>
@@ -24,7 +28,7 @@ namespace Mikita {
             } else if (m_optType == "P"){
                 return first_part - third_part;
             } else {
-                throw invalid_argument ("Invlaid Option Type");
+                throw invalid_argument ("Invalid Option Type");
             }
 
         }
@@ -37,7 +41,7 @@ namespace Mikita {
             double sig_value,
             double K_value, 
             double b_value,
-            string option_type) 
+            const string& option_type) 
             : Option (r_value, sig_value, K_value, b_value, option_type) {};
 
 
@@ -63,7 +67,7 @@ namespace Mikita {
                 double first_multiplier = m_K / (1 - y_value);
                 return first_multiplier * pow(second_multiplier, y_value);
             } else {
-                throw invalid_argument ("Invlaid Option Type");
+                throw invalid_argument ("Invalid Option Type");
             }
 
         }

@@ -1,7 +1,12 @@
-#ifndef AMERICAN
-#define AMERICAN
+// AmericanOption.hpp
+//
+// Perpetual American option (no expiry). Closed-form call and put prices.
+
+#ifndef AmericanOption_hpp
+#define AmericanOption_hpp
 
 #include "Option.hpp"
+#include <string>
 
 namespace Mikita{
     namespace Options {
@@ -11,7 +16,7 @@ namespace Mikita{
             private:
 
                 //helpers
-                double y () const;
+                double y () const;	// y1 for a call, y2 for a put
 
             public:
 
@@ -20,7 +25,7 @@ namespace Mikita{
                     double sig_value,
                     double K_value, 
                     double b_value,
-                    string option_type);
+                    const std::string& option_type);
                 
                 virtual ~AmericanOption () {};
 

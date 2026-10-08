@@ -1,12 +1,8 @@
-
-// A class that models a European option as an instance of an Entity object.
+// OptionExtras.cpp
 //
-// (C) Datasim Component Technology BV 2003
-//
+// Implementation of the global helper functions declared in OptionExtras.hpp.
 
-#include "AmericanOption.hpp"
-#include "EuropeanOption.hpp"
-#include "Option.hpp"
+#include "OptionExtras.hpp"
 #include <map>
 #include <stdexcept>
 #include <string>
@@ -27,13 +23,18 @@ std::map<std::string, EuropeanOption> createBatches()
 
 
 std::vector<double> MeshVector(double start, double end, double h) {
+    if (h <= 0.0 || end < start)
+        throw std::invalid_argument("MeshVector requires h > 0 and end >= start");
+
+    // Small tolerance so that end is included when (end - start) / h is a whole number.
+    const std::size_t num_points =
+        static_cast<std::size_t>(std::floor((end - start) / h + 1.0e-9)) + 1;
+
     std::vector<double> mesh;
-    
-    size_t num_points = static_cast<size_t>(std::ceil((end - start) / h)) + 1;
     mesh.reserve(num_points);
 
-    for (double x = start; x <= end + h * 0.5; x += h) {
-        mesh.push_back(x);
+    for (std::size_t i = 0; i < num_points; ++i) {
+        mesh.push_back(start + i * h);
     }
 
     return mesh;
@@ -60,10 +61,6 @@ std::vector<double> DeltaOverMesh(const EuropeanOption& opt,
 	return deltas;
 }
 
-
-
-// European rows: {r, sig, K, T, b, S}. American rows: {r, sig, K, b, S}.
-// style: "European" (default) or "American". American only supports out_type "Price".
 std::vector<std::vector<double>> PriceMatrix(
 	const std::vector<std::vector<double>>& params,
 	const std::string& optType,
@@ -112,9 +109,6 @@ std::vector<std::vector<double>> PriceMatrix(
 	return metrics;
 }
 
-//Build a params matrix from a base option by sweeping one field over mesh.
-// whichParam: "r", "sig", "K", "T", "b", or "S". S0 is the spot used when
-// whichParam is not "S".
 std::vector<std::vector<double>> BuildParamMatrix(
 	const EuropeanOption& base,
 	const std::vector<double>& mesh,
@@ -151,7 +145,6 @@ std::vector<std::vector<double>> BuildParamMatrix(
 	return params;
 }
 
-// American rows: {r, sig, K, b, S}. whichParam: "r", "sig", "K", "b", or "S".
 std::vector<std::vector<double>> BuildParamMatrix(
 	const AmericanOption& base,
 	const std::vector<double>& mesh,

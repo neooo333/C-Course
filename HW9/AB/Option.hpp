@@ -1,25 +1,25 @@
-#ifndef OPTION
-#define OPTION
+// Option.hpp
+//
+// Abstract base class for all options. Holds the parameters shared by every
+// option style (r, sig, K, b, call/put type) and declares the pure virtual
+// Price(U), where U is the spot price of the underlying.
+
+#ifndef Option_hpp
+#define Option_hpp
 
 #include <string>
-
-using namespace std;
 
 namespace Mikita {
     namespace Options{
         // Abstract Class
         class Option {
 
-            private:
-                int id; //random id
-
-
             protected:
                 double m_r;     // Interest rate
                 double m_sig;	// Volatility
                 double m_K;		// Strike price
                 double m_b;		// Cost of carry
-                string m_optType;	// Option name (call, put)
+                std::string m_optType;	// "C" (call) or "P" (put)
 
                 // internal functions
                 void copy (const Option& option_instance);
@@ -27,7 +27,7 @@ namespace Mikita {
             public:
                 // Constructors & Destructors
                 Option ();
-                Option (double r_value ,double sig_value, double K_value, double b_value, string option_type);
+                Option (double r_value ,double sig_value, double K_value, double b_value, const std::string& option_type);
                 Option (const Option& option_instance);
 
                 virtual ~Option () {};
@@ -49,8 +49,8 @@ namespace Mikita {
                 const double& b() const { return m_b; }
                 void b(double b_value) { m_b = b_value; }
 
-                const string& optType() const { return m_optType; }
-                void optType(const string& option_type)
+                const std::string& optType() const { return m_optType; }
+                void optType(const std::string& option_type)	// Accepts "c"/"p" as well
                 {
                     m_optType = option_type;
                     if (m_optType == "c")

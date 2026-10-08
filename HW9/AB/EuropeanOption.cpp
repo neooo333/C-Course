@@ -1,15 +1,17 @@
-// EurpeanOption.cpp
+// EuropeanOption.cpp
 //
-//	Author: Daniel Duffy
-//
-// (C) Datasim Component Technology BV 2003-2011
-//
+// Implementation of the generalised Black-Scholes European option
+// (formulae as given in the Level 9 assignment, after Haug).
 
 
 #include "EuropeanOption.hpp"
 #include "Option.hpp"
 #include <cmath>
+#include <stdexcept>
+#include <string>
 #include <boost/math/distributions/normal.hpp>
+
+using namespace std;
 
 
 namespace Mikita {
@@ -88,13 +90,11 @@ namespace Mikita {
 			double K_value,
 			double T_value,
 			double b_value,
-			string option_type,
-			string asset_name)
+			const string& option_type,
+			const string& asset_name)
 			: Option(r_value, sig_value, K_value, b_value, option_type),
 			  m_T(T_value), m_unam(asset_name)
-		{
-			optType(option_type);
-		}
+		{}
 
 
 		EuropeanOption::~EuropeanOption()
@@ -123,7 +123,7 @@ namespace Mikita {
 
 
 
-		// Greeeks ########################################
+		// Greeks ########################################
 		double EuropeanOption::Delta(double U) const 
 		{
 			if (optType () == "C")
@@ -139,11 +139,11 @@ namespace Mikita {
 			double denominator = U * m_sig * sqrt(m_T);
 
 			return numerator / denominator;
-		};
+		}
 
 
 
-		double EuropeanOption::Delta (double U, string method, double h) const{
+		double EuropeanOption::Delta (double U, const string& method, double h) const{
 			if (method == "approximation"){
 				double numerator  = EuropeanOption::Price (U + h) - EuropeanOption::Price (U - h);
 				double denominator = 2 * h;
@@ -155,7 +155,7 @@ namespace Mikita {
 			}
 		}
 
-		double EuropeanOption::Gamma (double U, string method, double h) const{
+		double EuropeanOption::Gamma (double U, const string& method, double h) const{
 			if (method == "approximation"){
 				double numerator  = EuropeanOption::Price (U + h) 
 					+ EuropeanOption::Price (U - h)

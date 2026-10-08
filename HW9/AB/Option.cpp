@@ -1,24 +1,26 @@
+// Option.cpp
+// Implementation of the abstract Option base class.
+
 #include "Option.hpp"
 #include <string>
-#include <cstdlib>
 
 using namespace std;
-
 
 namespace Mikita{
     namespace Options {
 
         Option::Option () 
-            : id (rand ()), m_r (0.05), m_sig (0.2), m_K (110.0), m_b (0.05), m_optType ("C")
+            : m_r (0.05), m_sig (0.2), m_K (110.0), m_b (0.05), m_optType ("C")
             {}
 
-        Option::Option (double r_value ,double sig_value, double K_value, double b_value, string option_type)
-            : id (rand ()), m_r (r_value), m_sig (sig_value), m_K (K_value), 
-            m_b (b_value),  m_optType (option_type) {}
+        Option::Option (double r_value ,double sig_value, double K_value, double b_value, const string& option_type)
+            : m_r (r_value), m_sig (sig_value), m_K (K_value), m_b (b_value)
+        {
+            optType (option_type);
+        }
 
         
         void Option::copy (const Option& option_instance) {
-            id = option_instance.id;
             m_r = option_instance.m_r;
             m_sig = option_instance.m_sig;
             m_K = option_instance.m_K;
@@ -50,14 +52,6 @@ namespace Mikita{
 			else
 				m_optType = "C";
 		}
-
-
-
-        
-
-
-
-
 
     }
 }

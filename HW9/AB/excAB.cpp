@@ -1,5 +1,8 @@
+
+
 #include "EuropeanOption.hpp"
 #include "AmericanOption.hpp"
+#include "OptionExtras.hpp"
 #include <iostream>
 #include <map>
 #include <string>
@@ -8,34 +11,6 @@
 
 using namespace std;
 using namespace Mikita::Options;
-
-map<string, EuropeanOption> createBatches();
-
-std::vector<double> MeshVector(double start, double end, double h);
-
-std::vector<double> PriceOverMesh(const Option& opt,
-	const std::vector<double>& S_mesh);
-
-std::vector<double> DeltaOverMesh(const EuropeanOption& opt,
-    const std::vector<double>& S_mesh);
-
-std::vector<std::vector<double>> PriceMatrix(
-	const std::vector<std::vector<double>>& params,
-	const std::string& optType,
-	const std::string& out_type = "Price",
-	const std::string& style = "European");
-
-std::vector<std::vector<double>> BuildParamMatrix(
-	const EuropeanOption& base,
-	const std::vector<double>& mesh,
-	const std::string& whichParam,
-	double S0);
-
-std::vector<std::vector<double>> BuildParamMatrix(
-	const AmericanOption& base,
-	const std::vector<double>& mesh,
-	const std::string& whichParam,
-	double S0);
 
 int main ()
 {
@@ -74,7 +49,9 @@ int main ()
         temp_count_itr++;
 	}
 
+
 	//  put-call parity, compute opposite price
+	
 	cout << "\n=== Part (b): Put-call parity ===\n";
     temp_count_itr = 0;
 
@@ -90,7 +67,6 @@ int main ()
 
 		const double putFromParity  = option.PutFromCallParity(bsCall, S);
 		const double callFromParity = option.CallFromPutParity(bsPut, S);
-
 		const bool parityHolds = option.CheckParity(bsCall, bsPut, S);
 
 		cout << name << '\n'
@@ -134,7 +110,6 @@ int main ()
 	vector<vector<double>> sig_params =
 		BuildParamMatrix(batch1, sig_mesh, "sig", spots["Batch 1"]);
 	vector<vector<double>> sig_prices = PriceMatrix(sig_params, "C", "Price");
-
 	for (size_t i = 0; i < sig_mesh.size(); ++i)
 	{
 		cout << "  sig = " << sig_mesh[i]
@@ -143,13 +118,11 @@ int main ()
 
 
     cout << "\n=== Part A2 (a) ===\n";
-
     EuropeanOption gamma_delta_test (0.1, 0.36, 100, 0.5, 0, "C", "Stock" );
     cout << "Delta Value Call: " << gamma_delta_test.Delta (105) << endl;
     gamma_delta_test.toggle ();
     cout << "Delta Value Put: " << gamma_delta_test.Delta (105) << endl;
     cout << "Gamma Value Call/Put: " << gamma_delta_test.Gamma (105) << endl;
-
     cout << "\n=== Part A2 (b) ===\n";
     
     gamma_delta_test.toggle();
@@ -166,7 +139,6 @@ int main ()
         }
 
     cout << "\n=== Part A2 (c) ===\n";
-
     vector<vector<double>> greek_params =
         BuildParamMatrix(gamma_delta_test, MeshVector(95, 115, 5), "S", 105);
     vector<vector<double>> deltas = PriceMatrix(greek_params, "C", "Delta");
@@ -176,20 +148,22 @@ int main ()
         cout << "  S = " << greek_params[i][5]
              << "  Delta = " << deltas[i][0]
              << "  Gamma = " << gammas[i][0] << '\n';
-
      cout << "\n=== Part A2 (d) ===\n";
 
     // Generating h values
 
-    vector <double> h = MeshVector(0.1, 3, 0.5);
+    // Decreasing h shows truncation error falling, then round-off error taking over
+    vector <double> h = {1.0, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8};
 
-    // Comparing Delta at different vlaues of h
+    // Comparing Delta at different values of h
 
     cout << "<<Delta Difference at S = 105>>"<< endl;
     double S = 105;
     for (double value : h){
         double exact_delta = gamma_delta_test.Delta (S);
         double num_delta = gamma_delta_test.Delta (S, "approximation", value);
+
+
 
         cout << "Exact Delta: " << exact_delta << endl 
         << "Numerical Delta: " << num_delta <<endl
@@ -202,6 +176,8 @@ int main ()
     for (double value : h){
         double exact_gamma = gamma_delta_test.Gamma (S);
         double num_gamma = gamma_delta_test.Gamma (S, "approximation", value);
+
+
 
         cout << "Exact Gamma: " << exact_gamma << endl 
         << "Numerical Gamma: " << num_gamma <<endl
@@ -217,6 +193,7 @@ int main ()
     AmericanOption test_American_option = AmericanOption (0.1, 0.1, 100, 0.02, "C");
     cout << "American Call Price: " << test_American_option.Price (110) << endl;
     test_American_option.toggle();
+
     cout << "American Put Price: " << test_American_option.Price (110) << endl;
 
     cout << endl;
@@ -227,13 +204,15 @@ int main ()
 
     vector <double> american_s =  MeshVector(70, 120, 1);
 
+    AmericanOption american_put = test_American_option;	// currently a put
     test_American_option.toggle ();
-    vector <double> american_p = PriceOverMesh(test_American_option, american_s);
+    vector <double> american_c = PriceOverMesh(test_American_option, american_s);
+    vector <double> american_p = PriceOverMesh(american_put, american_s);
 
-    temp_count_itr = 0;
-    for (vector<double>::const_iterator it = american_p.begin (); it != american_p.end (); it++){
-        cout<< "American Call value at S = " << american_s[temp_count_itr] << ": " << *it << endl;
-        temp_count_itr++;
+    for (size_t i = 0; i < american_s.size(); ++i){
+        cout << "S = " << american_s[i]
+             << "  American Call = " << american_c[i]
+             << "  American Put = " << american_p[i] << endl;
     }
 	cout << "\n=== Part B (d)===\n";
 	vector<double> am_sig_mesh = MeshVector(0.10, 0.50, 0.10);
@@ -242,7 +221,7 @@ int main ()
 	vector<vector<double>> am_sig_prices =
 		PriceMatrix(am_sig_params, "C", "Price", "American");
 
-	for (size_t i = 0; i < am_sig_mesh.size(); ++i)
+	for (size_t i = 0; i <am_sig_mesh.size(); ++i)
 	{
 		cout << "sig = " << am_sig_mesh[i]
 		     << "  American Call = " << am_sig_prices[i][0] << '\n';

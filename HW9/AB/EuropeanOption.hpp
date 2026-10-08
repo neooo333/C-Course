@@ -1,10 +1,8 @@
 // EuropeanOption.hpp
 //
-// Class that represents  solutions to European options. This is
-// an implementation using basic C++ syntax only.
-//
-// (C) Datasim Component Technology BV 2003-2011
-//
+// European option priced with the generalised Black-Scholes formula
+// (cost of carry b). Provides call/put prices, exact and divided-difference
+// Greeks (delta, gamma) and put-call parity helpers.
 
 #ifndef EuropeanOption_hpp
 #define EuropeanOption_hpp
@@ -12,7 +10,6 @@
 
 #include <string>
 #include "Option.hpp"
-using namespace std;
 
 
 namespace Mikita {
@@ -23,7 +20,7 @@ namespace Mikita {
 		private:	
 			// Attributes of the object (m_ prefix so accessors can reuse the names)
 			double m_T;		// Expiry date
-			string m_unam;	// Name of underlying asset
+			std::string m_unam;	// Name of underlying asset
 
 
 			// Private functions
@@ -52,8 +49,8 @@ namespace Mikita {
 				double K_value, 
 				double T_value,
 				double b_value,
-				string option_type,
-				string asset_name); // Custom Constructor
+				const std::string& option_type,
+				const std::string& asset_name); // Custom Constructor
 
 			virtual ~EuropeanOption();	
 
@@ -64,8 +61,8 @@ namespace Mikita {
 			const double& T() const { return m_T; }
 			void T(double T_value) { m_T = T_value; }
 
-			const string& unam() const { return m_unam; }
-			void unam(const string& asset_name) { m_unam = asset_name; }
+			const std::string& unam() const { return m_unam; }
+			void unam(const std::string& asset_name) { m_unam = asset_name; }
 
 			// Functions that calculate option price and sensitivities
 			double Price(double U) const;
@@ -82,11 +79,9 @@ namespace Mikita {
 			double Delta(double U) const;
 			double Gamma (double U) const;
 
-			double Delta (double U, string method, double h = 0.01) const;
-			double Gamma (double U, string method, double h = 0.01) const;
-
-
-
+			// method: "exact" or "approximation" (central divided difference, step h)
+			double Delta (double U, const std::string& method, double h = 0.01) const;
+			double Gamma (double U, const std::string& method, double h = 0.01) const;
 
 		};
 	}
