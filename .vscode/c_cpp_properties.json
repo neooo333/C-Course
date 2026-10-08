@@ -1,19 +1,16 @@
 {
   "configurations": [
     {
-      "name": "Mac",
+      "name": "Win32",
       "includePath": [
         "${workspaceFolder}/**",
-        "/opt/miniconda3/include"
+        "C:\\Users\\nikit\\boost\\boost_1_82_0"
       ],
       "defines": [],
-      "macFrameworkPath": [
-        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
-      ],
-      "compilerPath": "/usr/bin/clang++",
+      "compilerPath": "C:\\mingw32\\bin\\g++.exe",
       "cStandard": "c17",
       "cppStandard": "c++17",
-      "intelliSenseMode": "macos-clang-arm64"
+      "intelliSenseMode": "windows-gcc-x64"
     }
   ],
   "version": 4
