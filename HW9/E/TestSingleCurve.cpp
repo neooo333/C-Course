@@ -38,4 +38,10 @@ int main()
 	xl.CreateChart(x, vec1, "Test 101 curve on (0,10)");
 
 	return 0;
+
+	//Commands to run the script
+	//Open VS Command Line
+	// cd /d "C:\Users\nikit\OneDrive\Documents\C-Course\HW9\E"
+	// cl /nologo /EHsc /std:c++14 TestSingleCurve.cpp UtilitiesDJD\ExceptionClasses\DatasimException.cpp UtilitiesDJD\BitsAndPieces\StringConversions.cpp /I . /I "C:\Users\nikit\boost\boost_1_82_0" /link ole32.lib oleaut32.lib comsuppw.lib
+	// ./TestSingleCurve.exe
 }

@@ -65,8 +65,8 @@
 
 // Excel 2016
 
-#import "C:\Program Files\Microsoft Office\root\vfs\ProgramFilesCommonX86\Microsoft Shared\OFFICE16\MSO.DLL"
-#import "C:\Program Files\Microsoft Office\root\vfs\ProgramFilesCommonX86\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB"
-#import "C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE"
+#import "C:\Program Files\Microsoft Office\root\vfs\ProgramFilesCommonX86\Microsoft Shared\OFFICE16\MSO.DLL" rename("DocumentProperties", "DocumentPropertiesXL") rename("RGB", "RGBXL")
+#import "C:\Program Files\Microsoft Office\root\vfs\ProgramFilesCommonX86\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB" rename("Property", "PropertyVB")
+#import "C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE" rename("DialogBox", "DialogBoxXL") rename("RGB", "RGBXL") rename("DocumentProperties", "DocumentPropertiesXL") rename("ReplaceText", "ReplaceTextXL") rename("CopyFile", "CopyFileXL") no_dual_interfaces
 
 #endif

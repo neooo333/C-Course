@@ -208,7 +208,7 @@ void ExcelDriver::CreateChart(const std::vector<double>& x, const std::list<std:
 			pChart->Name = chartTitle.c_str();
 
 			// Make all titles visible again. They were erased by the ApplyCustomType method.
-			pChart->HasTitle=true;
+			pChart->PutHasTitle(VARIANT_TRUE);
 			pChart->ChartTitle->Text=chartTitle.c_str();
 
 			Excel::AxisPtr pAxis = pChart->Axes((long)Excel::xlValue, Excel::xlPrimary);
@@ -254,7 +254,7 @@ void ExcelDriver::CreateChart(const std::vector<double>& x, const std::vector<do
 void ExcelDriver::MakeVisible( bool b)
 {
 		// Make excel visible.
-		xl->Visible = b ? VARIANT_TRUE : VARIANT_FALSE;
+		xl->PutVisible(b ? VARIANT_TRUE : VARIANT_FALSE);
 }
 
 
@@ -386,4 +386,3 @@ void ExcelDriver::printStringInExcel(const std::list<std::string>& s, long start
 }
 
 #endif
-

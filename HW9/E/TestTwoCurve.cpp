@@ -54,4 +54,10 @@ int main()
 	xl.CreateChart(x, labels, curves, "Polynomial Curves", "H", "V");
 	
 	return 0;
+
+	//Commands to run the script
+	//Open VS Command Line
+	// cd /d "C:\Users\nikit\OneDrive\Documents\C-Course\HW9\E"
+	// cl /nologo /EHsc /std:c++17 /I"C:\Users\nikit\boost\boost_1_82_0" /I"C:\Users\nikit\OneDrive\Documents\C-Course\HW9\E" TestTwoCurve.cpp UtilitiesDJD\ExceptionClasses\DatasimException.cpp UtilitiesDJD\BitsAndPieces\StringConversions.cpp
+	// ./TestTwoCurve.exe
 }
