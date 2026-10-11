@@ -103,18 +103,17 @@ int main()
 	std::cin >> NSim;
 	std::cout << NSim << std::endl;
 
-	/*
 	
-		double tmpK;
+	
+	double tmpK;
 	if (std::cin >> tmpK)
 	{
 		myOption.K = tmpK;
 		std::cin >> myOption.T >> myOption.r >> myOption.sig >> myOption.type >> S_0;
 	}
 
-	
-	*/
-	// Optional trailing params (for batch runs without recompiling):
+
+	// Optional trailing params:
 	// K T r sig type S0
 
 

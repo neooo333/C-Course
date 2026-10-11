@@ -14,7 +14,6 @@ int main()
 		0.05, 0.20, 30.0, 1.0, 0.05, "C", "Stock");
 	Mikita::Options::EuropeanOption put(call);
 	put.toggle();
-
 	const std::vector<double> call_prices = PriceOverMesh(call, S_mesh);
 	const std::vector<double> put_prices = PriceOverMesh(put, S_mesh);
 
@@ -33,7 +32,7 @@ int main()
 
 	//  open VS terminal
 	// cd "C:\Users\nikit\OneDrive\Documents\C-Course\HW9\E"
-	// cl /EHsc /std:c++14 /I. /I"C:\Users\nikit\boost\boost_1_82_0" /Fe:TestOptionCurve.exe TestOptionCurve.cpp Option.cpp EuropeanOption.cpp OptionMesh.cpp UtilitiesDJD\ExceptionClasses\DatasimException.cpp UtilitiesDJD\BitsAndPieces\StringConversions.cpp
+	// cl /EHsc /std:c++14 /I. /IOptionClasses /I"C:\Users\nikit\boost\boost_1_82_0" /Fe:TestOptionCurve.exe TestOptionCurve.cpp OptionClasses\Option.cpp OptionClasses\EuropeanOption.cpp OptionClasses\OptionMesh.cpp UtilitiesDJD\ExceptionClasses\DatasimException.cpp UtilitiesDJD\BitsAndPieces\StringConversions.cpp
 
 	
 	return 0;

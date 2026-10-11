@@ -83,8 +83,7 @@ int main()
 	std::cin >> NSim;
 	std::cout << NSim << std::endl;
 
-	// Optional trailing params (for batch runs without recompiling):
-	// K T r sig type S0
+	// Type in Option aparmeters
 	double tmpK;
 	if (std::cin >> tmpK)
 	{
